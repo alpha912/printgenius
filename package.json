@@ -3,37 +3,67 @@
   "displayName": "PrintGenius",
   "description": "Convert documents and code files into beautifully styled PDFs.",
   "version": "0.0.1",
+  "publisher": "printgenius",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/printgenius.git"
+  },
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.93.0"
   },
   "categories": [
     "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "printgenius.convertToPdf",
+        "command": "printgenius.convert",
         "title": "PrintGenius: Convert to PDF"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "printgenius.convert",
+          "group": "export"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "printgenius.convert",
+          "group": "export"
+        }
+      ]
+    }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile",
-    "test": "node ./out/test/runTest.js"
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p ./",
+    "watch-tests": "tsc -p ./ -w",
+    "pretest": "npm run compile-tests && npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.9",
     "@types/node": "20.x",
-    "@types/vscode": "^1.95.0",
+    "@types/vscode": "^1.93.0",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.7.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "css-loader": "^6.10.0",
     "eslint": "^9.13.0",
+    "style-loader": "^3.3.4",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "webpack": "^5.95.0",
@@ -43,6 +73,7 @@
     "handlebars": "^4.7.8",
     "highlight.js": "^11.10.0",
     "marked": "^15.0.0",
+    "mermaid": "^10.8.0",
     "puppeteer": "^23.8.0"
   }
 }
