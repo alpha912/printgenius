@@ -6,64 +6,69 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.0] - 2024-01-16
 
+This is the initial release of PrintGenius VS Code extension, providing core functionality for converting code and Markdown files into high-quality PDFs.
+
 ### Added
-- Initial VS Code extension structure (6340592)
-  - Basic extension scaffolding
-  - Development environment setup:
-    - package.json and tsconfig.json configuration
-    - ESLint and TypeScript setup
-    - Webpack bundling process
-    - Test suite with Mocha and Chai
-    - VS Code debugging configuration
-  - Basic 'helloWorld' command implementation
 
-- Core PDF conversion functionality (d477534)
-  - Support for markdown and code files
-  - Syntax highlighting using Highlight.js
-  - Customizable PDF output:
-    - Header with optional logo images
-    - Footer with version and date
-    - Automatic page numbering
-  - HTML template system:
-    - resources/template.html for layout
-    - resources/hljsStyles.hbs for syntax highlighting
-  - Integration with:
-    - Marked for markdown parsing
-    - Puppeteer for PDF generation
-  - Comprehensive error handling
+#### Core Features
+- **Markdown and Code File Support**
+  - Conversion of Markdown (.md) and code files to PDF
+  - Syntax highlighting powered by Highlight.js
+  - Integration with Marked for Markdown parsing
+- **Professional PDF Output**
+  - Customizable header with optional logo
+  - Professional footer with version number and date
+  - Automatic page numbering
+  - Clean and modern HTML template (Handlebars-based)
+  - High-quality PDF generation via Puppeteer
+- **Error Handling**
+  - Comprehensive error feedback
+  - User-friendly error messages
 
-- Project licensing and documentation
-  - MIT License added (7165fee)
-  - Enhanced documentation (bf33cc7):
-    - Improved README structure
-    - Clear feature descriptions
-    - Installation and usage guides
-    - Configuration options
-    - VS Code Marketplace badges
-    - Professional formatting
+#### Technical Foundation (6340592)
+- Initial extension scaffolding
+- Development environment setup:
+  - TypeScript and ESLint configuration
+  - Webpack bundling
+  - Mocha and Chai test suite
+  - VS Code debugging setup
 
-- Initial release preparation (da3bfb9)
+#### Core Implementation (d477534)
+- PDF conversion engine
+- Template system integration
+- Syntax highlighting system
+- Header/footer customization
+- Markdown processing pipeline
+
+#### Documentation and Legal
+- MIT License (7165fee)
+- Enhanced documentation (bf33cc7):
+  - Comprehensive README
+  - Feature descriptions
+  - Installation guide
+  - Configuration options
+  - VS Code Marketplace badges
+- Project guidelines (da3bfb9):
   - Code of Conduct (Contributor Covenant v2.1)
   - Contribution guidelines
-  - Comprehensive changelog
-  - Final documentation updates
+  - Changelog
 
 ### Technical Stack
 - VS Code Extension API
 - TypeScript
 - Highlight.js for syntax highlighting
-- Marked for markdown parsing
+- Marked for Markdown parsing
 - Puppeteer for PDF generation
 - Handlebars for templating
+- Webpack for bundling
 
 ### Known Issues
 - None reported in initial release
 
 ## [Upcoming]
-Planned features and improvements:
-- Additional customization options
-- Support for more file types
-- Template customization
+Planned improvements:
+- Enhanced customization options
+- Support for additional file types
+- Template customization features
 - Performance optimizations
-- Enhanced error handling
 - User-requested features
