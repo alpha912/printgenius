@@ -155,6 +155,31 @@ export function activate(context: vscode.ExtensionContext) {
                     filters: { Images: ['png', 'jpg', 'jpeg', 'gif', 'svg'] },
                 });
 
+                // Read and encode the images
+                let logoLeftData: string | null = null;
+                if (logoLeftUri && logoLeftUri.length > 0) {
+                    try {
+                        const logoLeftPath = logoLeftUri[0].fsPath;
+                        logoLeftData = fs.readFileSync(logoLeftPath).toString('base64');
+                    } catch (error) {
+                        console.error('Error reading left logo image:', error);
+                        const errorMessage = error instanceof Error ? error.message : String(error);
+                        vscode.window.showErrorMessage(`Failed to read left logo image: ${errorMessage}`);
+                    }
+                }
+
+                let logoRightData: string | null = null;
+                if (logoRightUri && logoRightUri.length > 0) {
+                    try {
+                        const logoRightPath = logoRightUri[0].fsPath;
+                        logoRightData = fs.readFileSync(logoRightPath).toString('base64');
+                    } catch (error) {
+                        console.error('Error reading right logo image:', error);
+                        const errorMessage = error instanceof Error ? error.message : String(error);
+                        vscode.window.showErrorMessage(`Failed to read right logo image: ${errorMessage}`);
+                    }
+                }
+
                 // Convert content to HTML
                 let htmlContent: string;
 
@@ -252,21 +277,25 @@ export function activate(context: vscode.ExtensionContext) {
                     version: version,
                     date: date,
                     filePath: filePath,
-                    logoLeft: logoLeftUri ? logoLeftUri[0].fsPath : null,
-                    logoRight: logoRightUri ? logoRightUri[0].fsPath : null,
+                    logoLeft: logoLeftData,
+                    logoRight: logoRightData,
                     hljsStyles: hljsStyles,
                 };
 
                 // Load and compile the Handlebars template
                 const templatePath = path.join(context.extensionPath, 'resources', 'template.html');
                 
-                if (!fs.existsSync(templatePath)) {
-                    throw new Error(`Template file not found at ${templatePath}`);
-                }
-
-                const templateHtml = fs.readFileSync(templatePath, 'utf-8');
-                if (!templateHtml) {
-                    throw new Error('Template file is empty');
+                let templateHtml: string;
+                try {
+                    templateHtml = fs.readFileSync(templatePath, 'utf-8');
+                    if (!templateHtml) {
+                        throw new Error('Template file is empty');
+                    }
+                } catch (error) {
+                    console.error('Error reading template file:', error);
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    vscode.window.showErrorMessage(`Failed to read template file: ${errorMessage}`);
+                    return; // Exit the command if template cannot be read
                 }
 
                 const template = Handlebars.compile(templateHtml);
@@ -284,22 +313,29 @@ export function activate(context: vscode.ExtensionContext) {
                     fs.mkdirSync(outputDir, { recursive: true });
                 }
 
-                const browser = await puppeteer.launch({
-                    headless: true  // Use boolean true for headless mode
-                });
-                const page = await browser.newPage();
-                await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
-                await page.pdf({
-                    path: outputPath,
-                    format: 'A4',
-                    margin: { top: '50px', bottom: '70px', left: '50px', right: '50px' },
-                    displayHeaderFooter: false,
-                });
-                await browser.close();
-                vscode.window.showInformationMessage(`PDF generated at ${outputPath}`);
+                try {
+                    const browser = await puppeteer.launch({
+                        headless: true  // Use boolean true for headless mode
+                    });
+                    const page = await browser.newPage();
+                    await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
+                    await page.pdf({
+                        path: outputPath,
+                        format: 'A4',
+                        margin: { top: '50px', bottom: '70px', left: '50px', right: '50px' },
+                        displayHeaderFooter: false,
+                    });
+                    await browser.close();
+                    vscode.window.showInformationMessage(`PDF generated at ${outputPath}`);
+                } catch (error) {
+                    console.error('Error during PDF generation:', error);
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    vscode.window.showErrorMessage(`Failed to generate PDF: ${errorMessage}`);
+                }
             } catch (error) {
                 console.error('PrintGenius command error:', error);
-                vscode.window.showErrorMessage(`Failed to generate PDF: ${error}`);
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                vscode.window.showErrorMessage(`Failed to generate PDF: ${errorMessage}`);
             }
         });
 
