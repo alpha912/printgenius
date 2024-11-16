@@ -1,71 +1,67 @@
-# printgenius README
+# PrintGenius
 
-This is the README for your extension "printgenius". After writing up a brief description, we recommend including the following sections.
+[![VS Code Extension](https://img.shields.io/visual-studio-marketplace/v/printgenius.printgenius)](https://marketplace.visualstudio.com/items?itemName=printgenius.printgenius)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Convert your code and markdown files into beautifully styled PDFs with syntax highlighting, headers, and footers. Perfect for sharing code snippets, documentation, or creating professional reports.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Beautiful Syntax Highlighting**: Code maintains its VS Code styling in the PDF using Highlight.js
+- **Markdown Support**: Renders markdown files with full formatting and syntax highlighting
+- **Professional Layout**: Clean header and footer with customizable logos, version numbers, and dates
+- **Page Numbers**: Automatically adds page numbers to your PDFs
+- **Customization Options**: Add your company logos, version numbers, and custom dates
+- **Fast & Reliable**: Uses Puppeteer for high-quality PDF generation
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open VS Code
+2. Press `Ctrl+P` (or `Cmd+P` on macOS)
+3. Type `ext install printgenius.printgenius`
+4. Press Enter
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
 
-## Requirements
+1. Open any code file or markdown document in VS Code
+2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) to open the Command Palette
+3. Type "PrintGenius: Convert to PDF" and press Enter
+4. Optional: Enter version number and date when prompted
+5. Optional: Select logo images for the header
+6. Your PDF will be generated in the same directory as your source file
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Examples
 
-## Extension Settings
+### Code Files
+- Converts any code file to PDF while preserving syntax highlighting
+- Adds professional header with optional logos
+- Includes footer with version, date, and page numbers
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Markdown Files
+- Renders markdown with full formatting
+- Code blocks maintain syntax highlighting
+- Perfect for documentation and reports
 
-For example:
+## Configuration
 
-This extension contributes the following settings:
+PrintGenius works out of the box with no configuration needed. However, you can customize:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- Header logos (left and right)
+- Version number in footer
+- Date in footer
 
-## Known Issues
+## Contributing
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Release Notes
+## License
 
-Users appreciate release notes as you update your extension.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### 1.0.0
+## Bug Reports
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Found a bug? Please open an issue on our [GitHub repository](https://github.com/printgenius/printgenius/issues).
 
 ---
 
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Made with ❤️ by PrintGenius Team
