@@ -3,6 +3,7 @@ import tsParser from "@typescript-eslint/parser";
 
 export default [{
     files: ["**/*.ts"],
+    ignores: ["**/*.js"], // Ignore generated JavaScript files
 }, {
     plugins: {
         "@typescript-eslint": typescriptEslint,

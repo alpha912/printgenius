@@ -3,3 +3,10 @@ dist
 node_modules
 .vscode-test/
 *.vsix
+node_modules/
+dist/
+out/
+*.js
+*.js.map
+!webpack.config.js
+!eslint.config.mjs
