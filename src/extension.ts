@@ -111,15 +111,29 @@ export function activate(context: vscode.ExtensionContext) {
             try {
                 // Get the document content either from URI (context menu) or active editor
                 let document: vscode.TextDocument;
-                if (uri) {
-                    document = await vscode.workspace.openTextDocument(uri);
-                } else {
-                    const editor = vscode.window.activeTextEditor;
-                    if (!editor) {
-                        vscode.window.showErrorMessage('No file selected.');
-                        return;
+                try {
+                    if (uri) {
+                        // Check if file exists and is readable
+                        try {
+                            await fs.promises.access(uri.fsPath, fs.constants.R_OK);
+                        } catch (error) {
+                            vscode.window.showErrorMessage('Cannot access the file. Please check file permissions.');
+                            return;
+                        }
+                        document = await vscode.workspace.openTextDocument(uri);
+                    } else {
+                        const editor = vscode.window.activeTextEditor;
+                        if (!editor) {
+                            vscode.window.showErrorMessage('No file selected.');
+                            return;
+                        }
+                        document = editor.document;
                     }
-                    document = editor.document;
+                } catch (error) {
+                    console.error('Error accessing document:', error);
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    vscode.window.showErrorMessage(`Failed to access document: ${errorMessage}`);
+                    return;
                 }
 
                 const content = document.getText();
@@ -307,15 +321,33 @@ export function activate(context: vscode.ExtensionContext) {
                     `${path.basename(filePath, fileExtension)}.pdf`
                 );
 
-                // Ensure the output directory exists
+                // Ensure the output directory exists and is writable
                 const outputDir = path.dirname(outputPath);
-                if (!fs.existsSync(outputDir)) {
-                    fs.mkdirSync(outputDir, { recursive: true });
+                try {
+                    if (!fs.existsSync(outputDir)) {
+                        await fs.promises.mkdir(outputDir, { recursive: true });
+                    }
+                    // Check if we can write to the output directory
+                    await fs.promises.access(outputDir, fs.constants.W_OK);
+                } catch (error) {
+                    vscode.window.showErrorMessage('Cannot write to output directory. Please check permissions.');
+                    return;
+                }
+
+                // Check if output file already exists and is writable
+                if (fs.existsSync(outputPath)) {
+                    try {
+                        await fs.promises.access(outputPath, fs.constants.W_OK);
+                    } catch (error) {
+                        vscode.window.showErrorMessage('Cannot write to output file. Please check if file is locked or if you have sufficient permissions.');
+                        return;
+                    }
                 }
 
                 try {
                     const browser = await puppeteer.launch({
-                        headless: true  // Use boolean true for headless mode
+                        headless: true,
+                        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Add these arguments for better compatibility
                     });
                     const page = await browser.newPage();
                     await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
